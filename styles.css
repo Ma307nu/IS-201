@@ -1,0 +1,75 @@
+/* Estilo global */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f8ff;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+header, footer {
+  text-align: center;
+}
+
+a {
+  text-decoration: none;
+  color: #0044cc;
+  margin: 0 10px;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Estilos para los bloques */
+.white-box {
+  background-color: #e7eff6; /* Un gris claro profesional */
+  border: 1px solid #ccc; /* Un borde gris neutro */
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 800px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para darle profundidad */
+}
+
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 10px auto;
+}
+
+p {
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.large-font {
+  text-align: justify;
+  font-size: 16px; /* Ajusta el tamaño según lo necesites */
+  line-height: 1.2; /* Mejora la lectura con espaciado entre líneas */
+}
+
+.left-adjust {
+  display: block; /* Asegura que el elemento ocupe toda la línea */
+  margin-left: -20px; /* Ajusta el valor negativo para moverlo más a la izquierda */
+}
+.left-adjust-li {
+  margin-left: -20px; /* Ajusta el margen de la lista completa */
+  padding-left: 0; /* Elimina cualquier relleno adicional */
+}
+.left-adjust-span {
+  display: inline-block; /* Asegura que el texto se comporte bien */
+  margin-left: 0; /* Reinicia el margen si es necesario */
+}
+
+

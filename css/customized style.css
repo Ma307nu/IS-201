@@ -1,0 +1,13 @@
+.small-text {
+    font-size: 0.9em;
+  }
+.body {
+    background: linear-gradient(135deg, #f0f8ff, #add8e6); /* Azul claro a celeste */
+    color: #333; /* Color de texto */
+  }
+.italic {
+    font-style: italic;
+}
+.dark-blue {
+    color: #0044cc; /* Azul oscuro */
+}

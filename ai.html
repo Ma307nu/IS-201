@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BYU Football Guessing Game</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to bottom, #f8f9fa, #e9ecef);
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      color: #000;
+      font-size: 3rem;
+      font-weight: bold;
+      margin: 20px;
+      text-align: left; /* Mueve el título a la izquierda */
+      padding-left: 20px; /* Agrega espacio desde el borde izquierdo */
+    }
+    .game-container {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px auto;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      max-width: 400px;
+      text-align: center;
+    }
+    p {
+      font-size: 1.2rem;
+      margin: 10px 0;
+    }
+    #player-name {
+      font-weight: bold;
+      color: #007bff;
+    }
+    input {
+      padding: 10px;
+      width: 80%;
+      margin: 10px 0;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+      text-align: center;
+      font-size: 1rem;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #feedback {
+      margin: 15px 0;
+      font-size: 1.2rem;
+    }
+    #timer {
+      font-weight: bold;
+      color: red;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body style="background-image: url(Pictures/byu\ resolucion.jpg); background-size: cover; background-repeat: no-repeat; background-position: center center;background-attachment: fixed;">
+  <h1 style="color: white; text-align: center; margin-top: 20px;">Guess the BYU Football Player's Number</h1>
+  <!-- Título actualizado -->
+  <div class="game-container">
+    <p>Player: <span id="player-name"></span></p>
+    <p id="timer">Time left: 30 seconds</p>
+    <input type="number" id="userGuess" placeholder="Enter player's number (0-99)" min="0" max="99">
+    <button onclick="checkGuess()">Submit</button>
+    <p id="feedback"></p>
+    <button onclick="restartGame()">Restart Game</button>
+  </div>
+
+  <script>
+    // Lista completa de jugadores y números
+    const players = [
+      { name: "Jakob Robinson", number: 0 }, { name: "Micah Harper", number: 1 }, { name: "Keanu Hill", number: 1 },
+      { name: "Chase Roberts", number: 2 }, { name: "Marque Collins", number: 2 }, { name: "Raider Damuni", number: 3 },
+      { name: "Gerry Bohanon", number: 3 }, { name: "Miles Davis", number: 4 }, { name: "Mory Bamba", number: 4 },
+      { name: "Darius Lassiter", number: 5 }, { name: "Hinckley Ropati", number: 7 }, { name: "Crew Wakley", number: 7 },
+      { name: "Enoch Nawahine", number: 21 }, { name: "Evan Johnson", number: 21 }, { name: "Mason Fakahua", number: 22 },
+      { name: "Tommy Prassas", number: 22 }, { name: "Pokaiaua Haunga", number: 23 }, { name: "Jonathan Kabeya", number: 23 },
+      { name: "Therrian Alexander III", number: 24 }, { name: "Talan Alfrey", number: 25 }, { name: "Ethan Slade", number: 26 },
+      { name: "LJ Martin", number: 27 }, { name: "Matthias Leach", number: 27 }, { name: "Tanner Wall", number: 28 },
+      { name: "Jovesa Damuni", number: 28 }, { name: "Jayden Dunlap", number: 29 }, { name: "Rowan Reay", number: 29 },
+      { name: "Miles Hall", number: 30 }, { name: "Sione I Moa", number: 30 }, { name: "Kevin Doe", number: 31 },
+      { name: "Marcus McKenzie", number: 32 }, { name: "Will Zundel", number: 32 }, { name: "Choé Bryant-Strother", number: 33 },
+      { name: "Maika Kaufusi", number: 34 }, { name: "Charles Miska", number: 34 }, { name: "Sam Vander Haar", number: 35 },
+      { name: "Jarinn Kalama", number: 35 }, { name: "Carson Tujague", number: 36 }, { name: "Malae Tanuvasa", number: 37 },
+      { name: "Payton VanSteenkiste", number: 38 }, { name: "Landon Rehkow", number: 39 }, { name: "Sione Moa", number: 41 },
+      { name: "Ray Paulo", number: 42 }, { name: "Petey Tuipulotu", number: 42 }, { name: "Cannon Skidmore", number: 43 },
+      { name: "Will Ferrin", number: 44 }, { name: "Ephraim Asiata", number: 44 }, { name: "Viliami Po'uha", number: 45 },
+      { name: "Tei Nacua", number: 45 }, { name: "Nathan Hoke", number: 46 }, { name: "Dalton Riggs", number: 47 },
+      { name: "Bodie Schoonover", number: 48 }, { name: "Nason Coleman", number: 49 }, { name: "Lucky Finau", number: 49 },
+      { name: "Dallin Havea", number: 50 }, { name: "Isaiah Jatta", number: 50 }, { name: "Sonny Makasini", number: 51 },
+      { name: "David Clifford", number: 52 }, { name: "Orion Maile-Kaufusi", number: 53 }, { name: "Siale Esera", number: 54 },
+      { name: "Jackson Nelson", number: 54 }, { name: "John Taumoepeau", number: 55 }, { name: "Austin Leausa", number: 55 },
+      { name: "Jake Eichorn", number: 56 }, { name: "Nuuletau Sellesin", number: 56 }, { name: "Aisea Moa", number: 58 },
+      { name: "Logan Lutui", number: 59 }, { name: "Weylin Lapuaho", number: 61 }, { name: "Bruce Mitchell", number: 63 },
+      { name: "Brayden Keim", number: 64 }, { name: "Sione Hingano", number: 66 }, { name: "Trevor Pay", number: 67 },
+      { name: "Connor Pay", number: 70 }, { name: "Ikinasio Tupou", number: 71 }, { name: "Joe Brown", number: 72 },
+      { name: "Weston Jones", number: 73 }, { name: "Trevin Ostler", number: 74 }, { name: "Sam Dawe", number: 75 },
+      { name: "Caleb Etienne", number: 76 }, { name: "Jake Griffin", number: 77 }, { name: "Kaden Chidester", number: 79 },
+      { name: "Ryner Swanson", number: 80 }, { name: "Noah Moeaki", number: 82 }, { name: "Weston Covey", number: 83 },
+      { name: "Prince Zombo", number: 84 }, { name: "Anthony Olsen", number: 85 }, { name: "Jackson Bowers", number: 86 },
+      { name: "Ethan Erickson", number: 87 }, { name: "Mata'ava Ta'ase", number: 88 }, { name: "Dominique McKenzie", number: 89 },
+      { name: "David Latu", number: 90 }, { name: "Dallin Johnson", number: 91 }, { name: "Tyler Batty", number: 92 },
+      { name: "Blake Mangelson", number: 93 }, { name: "John Nelson", number: 94 }, { name: "Luke To'omalatai", number: 95 },
+      { name: "Iosefa Letuli", number: 96 }, { name: "Matthias Dunn", number: 97 }, { name: "Kinilau Fonohema", number: 97 },
+      { name: "Sani Tuala", number: 98 }, { name: "Joshua Singh", number: 99 }
+    ];
+
+    
+    let currentPlayer;
+    let timeLeft = 30;
+    let timer;
+    let gameWon = false; // Variable para controlar si el jugador ganó
+
+    function startGame() {
+      const randomIndex = Math.floor(Math.random() * players.length);
+      currentPlayer = players[randomIndex];
+      document.getElementById("player-name").textContent = currentPlayer.name;
+      document.getElementById("feedback").textContent = "";
+      gameWon = false; // Restablecer el estado del juego
+      startTimer();
+    }
+
+    function startTimer() {
+      const timerDisplay = document.getElementById("timer");
+      timeLeft = 30;
+      clearInterval(timer);
+      timer = setInterval(() => {
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          if (!gameWon) { // Solo mostrar Game Over si no ha ganado
+            timerDisplay.textContent = "⏰ Time's up!";
+            document.getElementById("feedback").textContent = "Game Over! You ran out of time.";
+          }
+        } else {
+          timerDisplay.textContent = `Time left: ${timeLeft} seconds`;
+          timeLeft--;
+        }
+      }, 1000);
+    }
+
+    function checkGuess() {
+      const userGuess = document.getElementById("userGuess").value;
+      if (parseInt(userGuess) === currentPlayer.number && !gameWon) {
+        clearInterval(timer); // Detener el timer cuando adivina correctamente
+        document.getElementById("feedback").textContent = "🎉 You did it! You are a real cougar. GO COUGS!";
+        gameWon = true; // Cambiar el estado del juego a ganado
+      } else if (!gameWon) {
+        document.getElementById("feedback").textContent = "❌ Wrong number! Try again.";
+      }
+    }
+
+    function restartGame() {
+      clearInterval(timer);
+      startGame();
+    }
+
+    window.onload = startGame;
+  </script>
+</body>
+</html>
